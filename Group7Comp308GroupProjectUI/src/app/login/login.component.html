@@ -1,0 +1,76 @@
+<div class="container vh-100 d-flex flex-column justify-content-between">
+    <mat-toolbar class="row">
+        <h1>My Community</h1>
+    </mat-toolbar>
+    <div class="row d-flex justify-content-center">
+        <mat-card appearance="raised" class="login-card">
+            <mat-card-header class="my-1 d-flex justify-content-center">
+            </mat-card-header>
+            <mat-tab-group [(selectedIndex)]="this.currentTabIndex">
+                <mat-tab label="Login">
+                    <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+                        <mat-card-content>
+                            <mat-form-field class="my-1">
+                                <input matInput placeholder="User Name" formControlName="username">
+                                @if (this.loginForm.controls['username'].hasError('required')) {
+                                    <mat-error>Username is <strong>required</strong></mat-error>
+                                }
+                            </mat-form-field>
+                            <br />
+                            <mat-form-field class="my-1">
+                                <input type="password" matInput placeholder="Password" formControlName="password" />
+                                @if (loginForm.controls['password'].hasError('required')) {
+                                    <mat-error>Password is <strong>required</strong></mat-error>
+                                }
+                                @if (loginForm.controls['password'].hasError('pattern')) {
+                                    <mat-error>Password is <strong>weak try with non alphanumeric and at least 6 characters and 1 number</strong></mat-error>
+                                }
+                            </mat-form-field>
+                            <div>
+                                <span>{{ message() }}</span>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions class="my-2">
+                            <div>
+                                <button mat-raised-button [disabled]="!this.loginForm.valid">Login</button>
+                            </div>
+                        </mat-card-actions>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Register">
+                    <form [formGroup]="registrationForm" (ngSubmit)="onRegistrationSubmit()">
+                        <mat-card-content>
+                            <mat-form-field class="my-1">
+                                <input matInput placeholder="User Name" formControlName="username">
+                                @if (registrationForm.controls['username'].hasError('required')) {
+                                    <mat-error>Username is <strong>required</strong></mat-error>
+                                }
+                            </mat-form-field>
+                            <mat-form-field class="my-1">
+                                <input type="password" matInput placeholder="Password" formControlName="password" />
+                                @if (registrationForm.controls['password'].hasError('required')) {
+                                    <mat-error>Password is <strong>required</strong></mat-error>
+                                }
+                                @if (registrationForm.controls['password'].hasError('pattern')) {
+                                    <mat-error>Password is <strong>weak try with non alphanumeric and at least 6 characters and 1 number</strong></mat-error>
+                                }
+                            </mat-form-field>
+                            <div>
+                                <span>{{ message() }}</span>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions class="my-2">
+                            <div class="button-flex-container">
+                                <button mat-raised-button type="submit"
+                                    [disabled]="!this.registrationForm.valid">Register</button>
+                            </div>
+                        </mat-card-actions>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+    <div class="row text-center my-1">
+        <h6>Comp308 Group 7 Group Project</h6>
+    </div>
+</div>

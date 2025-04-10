@@ -4,36 +4,59 @@ import { inject } from '@angular/core';
 import { UserSecurityService } from './services/auth-service/auth.service';
 
 export const routes: Routes = [
-    {
-        path: 'home',
-        title: 'MetFlex Home',
-        loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
-        canActivate: [
-            () => {
-                const router = inject(Router)
-                const userService = inject(UserSecurityService)
-                if (userService.isAuthenticated()) {
-                    return true
-                } else {
-                    router.navigate(['/login'])
-                    return false
-                }
-            }
+  {
+    path: 'home',
+    title: 'MetFlex Home',
+    loadComponent: () =>
+      import('./home/home.component').then((m) => m.HomeComponent),
+    canActivate: [
+      () => {
+        const router = inject(Router);
+        const userService = inject(UserSecurityService);
+        if (userService.isAuthenticated()) {
+          return true;
+        } else {
+          router.navigate(['/login']);
+          return false;
+        }
+      },
+    ],
+    children: [
+      {
+        path: 'resident',
+        loadComponent: () =>
+          import('./home/resident/resident.home/resident.home.component').then(
+            (m) => m.ResidentHomeComponent
+          ),
+        children: [
+          {
+            path: 'local-news',
+            loadComponent: () =>
+              import(
+                './home/resident/resident.home/local.news/local.news.component'
+              ).then((m) => m.LocalNewsComponent),
+          },
+          {
+            path: 'local-news',
+            loadComponent: () =>
+              import(
+                './home/resident/resident.home/local.news/local.news.component'
+              ).then((m) => m.LocalNewsComponent),
+          },
+          {
+            path: 'local-news',
+            loadComponent: () =>
+              import(
+                './home/resident/resident.home/local.news/local.news.component'
+              ).then((m) => m.LocalNewsComponent),
+          },
         ],
-        // children : [
-        //     {
-        //         path: 'movies', 
-        //         loadComponent: () => import('./home/movie/movie-list/movie-list.component').then(m => m.MovieListComponent)
-        //     },
-        //     {
-        //         path: 'movies/:id', 
-        //         loadComponent: () => import('./home/movie/movie-information/movie-information.component').then(m => m.MovieInformationComponent)
-        //     }
-        // ]
-    },
-    { 
-        path: 'login', 
-        component: LoginComponent,
-        title: 'Metflex'
-    }
+      },
+    ],
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'Metflex',
+  },
 ];

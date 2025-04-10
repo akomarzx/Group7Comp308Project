@@ -33,8 +33,7 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private dialog : MatDialog) {}
 
   ngOnInit(): void {
-    this.router.navigate(['/home/movies'])
-    
+    this.router.navigate(['/home/resident'])
   }
   
   private breakpointObserver = inject(BreakpointObserver);

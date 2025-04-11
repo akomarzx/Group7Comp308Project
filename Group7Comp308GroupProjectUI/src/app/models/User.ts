@@ -14,3 +14,8 @@ export interface UserCredentials {
     username: string,
     password: string
 }
+
+export interface RouteDisplay {
+    routePath: string,
+    routeName: string
+}

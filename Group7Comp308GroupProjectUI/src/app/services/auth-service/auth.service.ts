@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, of, exhaustMap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import { map } from 'rxjs/operators';
 import { LOGIN_USER, REGISTER_USER } from './auth.graphql'; // adjust path as needed
-import { User } from '../../models/User';
+import { Role, User } from '../../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -21,25 +21,29 @@ export class UserSecurityService {
   }
 
   authenticateUser(username: string, password: string): Observable<User> {
-    return of({ username, password }).pipe(
-      exhaustMap((credentials) =>
-        this.apollo.mutate<{ login: User }>({
-          mutation: LOGIN_USER,
-          variables: credentials,
-        }).pipe(
-          map(result => {
-            const user = result.data?.login!;
-            this.user.next(user);
-            return user;
-          })
-        )
-      )
-    );
+    return of({
+      username: "Ronald",
+      accessToken: "asdafasd",
+      role: Role.RESIDENT
+    })
+    // return of({ username, password }).pipe(
+    //   exhaustMap((credentials) =>
+    //     this.apollo.mutate<{ login: User }>({
+    //       mutation: LOGIN_USER,
+    //       variables: credentials,
+    //     }).pipe(
+    //       map(result => {
+    //         const user = result.data?.login!;
+    //         this.user.next(user);
+    //         return user;
+    //       })
+    //     )
+    //   )
+    // );
   }
 
   isAuthenticated(): boolean {
-    return true
-    //return this.user.getValue() != null;
+    return this.user.getValue() != null;
   }
 
   storeUser(authenticatedUser: User) {

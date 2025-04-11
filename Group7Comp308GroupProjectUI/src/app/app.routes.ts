@@ -31,24 +31,27 @@ export const routes: Routes = [
         children: [
           {
             path: 'local-news',
+            title: 'Local News',
             loadComponent: () =>
               import(
                 './home/resident/resident.home/local.news/local.news.component'
               ).then((m) => m.LocalNewsComponent),
           },
           {
-            path: 'local-news',
+            path: 'emergency-alert',
             loadComponent: () =>
               import(
-                './home/resident/resident.home/local.news/local.news.component'
-              ).then((m) => m.LocalNewsComponent),
+                './home/resident/resident.home/emergency.alerts/emergency.alerts.component'
+              ).then((m) => m.EmergencyAlertsComponent),
+              title: "Emergency Alert"
           },
           {
-            path: 'local-news',
+            path: 'neighborhood-help',
             loadComponent: () =>
               import(
-                './home/resident/resident.home/local.news/local.news.component'
-              ).then((m) => m.LocalNewsComponent),
+                './home/resident/resident.home/neighborhood.help/neighborhood.help.component'
+              ).then((m) => m.NeighborhoodHelpComponent),
+              title: 'Neighborhood Help'
           },
         ],
       },

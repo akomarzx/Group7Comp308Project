@@ -9,7 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserSecurityService } from '../services/auth-service/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../models/User';
+import { Role, User } from '../models/User';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -57,6 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+    this.loginForm.patchValue({
+      username: "test",
+      password: "PasswordTest1!"
+    })
   }
 
   ngOnDestroy(): void {
@@ -68,7 +72,12 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     this.userSecService.authenticateUser(username, password).subscribe({
       next: (result: User) => {
-          this.userSecService.storeUser(result)
+          let user : User = {
+            username: "Ronald",
+            accessToken: "adagasdasd",
+            role: Role.RESIDENT
+          }
+          this.userSecService.storeUser(user)
           this.router.navigate(['home'])
       },
       error: (error) => {

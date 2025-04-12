@@ -8,7 +8,7 @@ import { Role, User } from '../../models/User';
 @Injectable({
   providedIn: 'root'
 })
-export class UserSecurityService {
+export class AuthService {
 
   private user: BehaviorSubject<User | null>;
 

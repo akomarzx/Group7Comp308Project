@@ -1,4 +1,4 @@
-export interface Post {
+export interface LocalNewsPost {
   user: string;
   title: string;
   content: string;

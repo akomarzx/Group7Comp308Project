@@ -11,7 +11,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Role, RouteDisplay } from '../models/User';
-import { UserSecurityService as AuthService } from '../services/auth-service/auth.service';
+import { AuthService as AuthService } from '../services/auth.service/auth.service';
 
 @Component({
   selector: 'app-home',

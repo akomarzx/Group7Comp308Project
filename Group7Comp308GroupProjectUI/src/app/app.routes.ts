@@ -1,7 +1,7 @@
 import { Router, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { inject } from '@angular/core';
-import { UserSecurityService } from './services/auth-service/auth.service';
+import { AuthService } from './services/auth.service/auth.service';
 
 export const routes: Routes = [
   {
@@ -12,7 +12,7 @@ export const routes: Routes = [
     canActivate: [
       () => {
         const router = inject(Router);
-        const userService = inject(UserSecurityService);
+        const userService = inject(AuthService);
         if (userService.isAuthenticated()) {
           return true;
         } else {

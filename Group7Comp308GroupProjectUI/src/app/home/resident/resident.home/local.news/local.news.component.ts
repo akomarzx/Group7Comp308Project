@@ -1,12 +1,18 @@
-import { ChangeDetectorRef, Component, signal, ViewChild, WritableSignal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Post } from '../../../../models/Resident';
+import { LocalNewsPost } from '../../../../models/Resident';
 import { DatePipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogRef } from '@angular/cdk/dialog';
+import { AddNewsComponent } from './add.news/add.news.component';
+import { ResidentService } from '../../../../services/resident.service/resident.service.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-local.news',
@@ -17,69 +23,37 @@ import { DatePipe } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    DatePipe
+    DatePipe,
+    MatIconModule
   ],
   templateUrl: './local.news.component.html',
   styleUrl: './local.news.component.scss'
 })
-export class LocalNewsComponent {
+export class LocalNewsComponent implements OnInit, OnDestroy {
 
-  posts: Post[] = [
-    {
-      user: 'JaneDoe123',
-      title: 'Road Construction on Main St.',
-      content: 'Expect delays this week due to construction near the downtown intersection.',
-      timestamp: new Date()
-    },
-    {
-      user: 'LocalDad88',
-      title: 'Community BBQ This Saturday!',
-      content: 'Everyone is welcome at the park for food and fun. Starts at 2pm!',
-      timestamp: new Date()
-    }
-  ];
-  
-  @ViewChild('formDirective') private formDirective: FormGroupDirective | undefined;
+  postsSignal : WritableSignal<LocalNewsPost[]>
+  #destroyed$ : Subject<null>
 
-  postsSignal : WritableSignal<Post[]> = signal(this.posts)
-
-  postForm!: FormGroup;
-
-  constructor(private fb: FormBuilder, private cdRef : ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private dialog : MatDialog, private residentService: ResidentService) {
+    this.postsSignal = signal([])
+    this.#destroyed$ = new Subject<null>()
+  }
 
   ngOnInit(): void {
-    this.postForm = this.fb.group({
-      user: ['', Validators.required],
-      title: ['', Validators.required],
-      content: ['', Validators.required]
-    });
+    this.residentService.getAllLocalResidentNews().pipe(
+      takeUntil(this.#destroyed$)
+    ).subscribe((localNewsList) => {
+      this.postsSignal.set(localNewsList)
+    })
   }
 
-  postUpdate() {
-
-    if (this.postForm.valid) {
-
-      const formValue = this.postForm.value;
-
-      this.postsSignal.update((currentVal) => {
-        return [...currentVal,  {
-          ...formValue,
-          timestamp: new Date()
-        }]
-      })
-      
-      this.postForm.reset()
-
-      Object.keys(this.postForm.controls).forEach(controlName => {
-        const control = this.postForm.get(controlName);
-        control?.markAsPristine();
-        control?.markAsUntouched();
-        control?.setErrors(null);
-      });
-    
-      this.postForm.updateValueAndValidity(); // Ensure UI updates
-
-    }
+  ngOnDestroy(): void {
+    this.#destroyed$.next(null)
   }
+
+  onAddNewsClicked() {
+    this.dialog.open(AddNewsComponent)
+  }
+
 }
 

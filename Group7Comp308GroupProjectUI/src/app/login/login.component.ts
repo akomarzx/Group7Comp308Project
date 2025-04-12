@@ -7,7 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import {MatIconModule} from '@angular/material/icon';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserSecurityService } from '../services/auth-service/auth.service';
+import { AuthService } from '../services/auth.service/auth.service';
 import { Router } from '@angular/router';
 import { Role, User } from '../models/User';
 @Component({
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   currentTabIndex : number
 
   constructor(private formBuilder : FormBuilder, 
-    private userSecService : UserSecurityService, 
+    private userSecService : AuthService, 
     private router : Router){
 
     this.message = signal('')

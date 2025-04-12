@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-resident.home',
@@ -11,9 +12,23 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 })
 export class ResidentHomeComponent implements OnInit {
 
-  constructor(private router : Router, private activeRoute : ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.router.navigate(["local-news"], {relativeTo: this.activeRoute})
+  isOnHomeRoute : WritableSignal<boolean>
+  
+  constructor(private router : Router, private activeRoute : ActivatedRoute) {
+    this.isOnHomeRoute = signal(true)
   }
+  
+  ngOnInit(): void {
+
+    this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe(() => {
+      // Check if the current route is exactly /home (not a child route)
+      const currentRoute = this.router.url;
+      this.isOnHomeRoute.set(currentRoute === '/home/resident');
+    });
+    
+  }
+
+
 }

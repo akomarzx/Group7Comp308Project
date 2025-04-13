@@ -4,12 +4,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatIconModule} from '@angular/material/icon';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service/auth.service';
 import { Router } from '@angular/router';
 import { Role, User } from '../models/User';
+import { MatChipsModule } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -21,7 +25,8 @@ import { Role, User } from '../models/User';
     MatToolbarModule,
     MatTabsModule,
     MatIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatChipsModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -32,28 +37,35 @@ export class LoginComponent implements OnInit, OnDestroy{
   registrationForm : FormGroup;
   message : WritableSignal<String>;
   currentTabIndex : number
+  interestEntered: WritableSignal<{ id : number, name: string }[]>
 
-  constructor(private formBuilder : FormBuilder, 
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  readonly chipInputControl = new FormControl<string[] | null>(null);
+  
+  constructor(private fb : FormBuilder, 
     private userSecService : AuthService, 
     private router : Router){
 
     this.message = signal('')
     this.currentTabIndex = 0
 
-    this.loginForm = this.formBuilder.group({
+    this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required,
         Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]
       ]
     });
 
-    this.registrationForm = this.formBuilder.group({
+    this.registrationForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required,
         Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]
-      ]
+      ],
+      interests: this.fb.nonNullable.control<string[]>([], [Validators.required]),
+      address: this.fb.nonNullable.control<string>('', [Validators.required])
     });
 
+    this.interestEntered = signal([])
   }
 
   ngOnInit(): void {
@@ -75,7 +87,9 @@ export class LoginComponent implements OnInit, OnDestroy{
           let user : User = {
             username: "Ronald",
             accessToken: "adagasdasd",
-            role: Role.RESIDENT
+            role: Role.RESIDENT,
+            interests: [],
+            address: "Test address"
           }
           this.userSecService.storeUser(user)
           this.router.navigate(['home'])
@@ -106,4 +120,15 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.registrationForm.markAsUntouched()
     this.message.set('');
   }
+
+  remove(obj: { name: string }): void {
+    this.interestEntered.update(interestList => {
+      return interestList.filter((value) => value.name !== obj.name)
+    })
+  }
+
+  onAddInterests(input : string) {
+    this.interestEntered.update((values) => [...values, {name:input, id: this.interestEntered().length + 1}])
+  }
+
 }

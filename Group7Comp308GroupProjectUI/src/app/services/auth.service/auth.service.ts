@@ -24,7 +24,9 @@ export class AuthService {
     return of({
       username: "Ronald",
       accessToken: "asdafasd",
-      role: Role.RESIDENT
+      role: Role.RESIDENT,
+      interests: [],
+      address: "Test Address"
     })
     // return of({ username, password }).pipe(
     //   exhaustMap((credentials) =>

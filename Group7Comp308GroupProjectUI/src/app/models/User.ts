@@ -7,7 +7,9 @@ export enum Role {
 export interface User {
     username: string,
     accessToken : string,
-    role: Role
+    role: Role,
+    interests: string[],
+    address: string
 }
 
 export interface UserCredentials {

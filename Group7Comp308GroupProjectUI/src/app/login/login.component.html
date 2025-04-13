@@ -55,6 +55,24 @@
                                     <mat-error>Password is <strong>weak try with non alphanumeric and at least 6 characters and 1 number</strong></mat-error>
                                 }
                             </mat-form-field>
+                            <mat-form-field class="w-75">
+                                <mat-label>Interests</mat-label>
+                                <mat-chip-grid #reactiveChipGrid aria-label="Enter reactive form keywords" [formControl]="this.chipInputControl">
+                                  @for (interest of interestEntered(); track interest.id ; let idx = $index) {
+                                  <mat-chip-row (removed)="remove(interest)">
+                                    {{interest.name}}
+                                    <button matChipRemove aria-label="'remove genre' + keyword">
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </mat-chip-row>
+                                  }
+                                </mat-chip-grid>
+                                <input placeholder="Interests" [matChipInputFor]="reactiveChipGrid" #interestInput/>
+                                <button mat-raised-button type="button" class="my-1" (click)="onAddInterests(interestInput.value)">
+                                    Add
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                              </mat-form-field>
                             <div>
                                 <span>{{ message() }}</span>
                             </div>

@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
       {
         roleName: Role.RESIDENT,
         routes: [
+          {routePath: "/home/resident", routeName: "Home"},
           {routePath: "/home/resident/local-news", routeName: "Local News"},
           {routePath: "/home/resident/emergency-alert", routeName: "Emergency Alerts"},
           {routePath: "/home/resident/neighborhood-help", routeName: "Neighborhood Help"},

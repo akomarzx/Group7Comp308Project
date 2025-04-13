@@ -56,7 +56,10 @@ export class AddNewsComponent {
         timestamp: new Date()
       }
       
-      this.residentService.addNewLocalNews(newNews);
+      this.residentService.addNewLocalNews(newNews).subscribe((value) => {
+        console.log(value)
+      });
+
       this.dialogRef.close()
 
     }

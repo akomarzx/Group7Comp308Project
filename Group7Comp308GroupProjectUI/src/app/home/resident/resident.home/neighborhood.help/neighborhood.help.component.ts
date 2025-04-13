@@ -41,7 +41,7 @@ export class NeighborhoodHelpComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.residentService.getAllNeighboordNewsPost().pipe(
+    this.residentService.getAllNeighborhoodNewsPost().pipe(
       takeUntil(this.#destroyed$),
     ).subscribe(value => {
       this.neighborhoodHelpRequests.set(value)

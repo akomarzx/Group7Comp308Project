@@ -51,7 +51,7 @@ export class AddNeighborhoodHelpComponent {
     this.postForm = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
-      interests: this.fb.nonNullable.control<string[]>([]),
+      interestsArea: this.fb.nonNullable.control<string[]>([]),
       location: this.fb.nonNullable.control<string>('', [Validators.required])
     });
 
@@ -69,8 +69,10 @@ export class AddNeighborhoodHelpComponent {
         username: this.authService.currentUser?.username,
         timestamp: new Date(),
       };
-
       console.log(newNeigbhorhoodPost)
+      this.residentService.addNeighborhoodRequest(newNeigbhorhoodPost).subscribe((value) => {
+        console.log(value)
+      })
 
       this.dialogRef.close();
     }

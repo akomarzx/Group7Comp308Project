@@ -26,7 +26,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
     MatTabsModule,
     MatIconModule,
     ReactiveFormsModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSelectModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -63,7 +64,8 @@ export class LoginComponent implements OnInit, OnDestroy{
         Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]
       ],
       interests: this.fb.nonNullable.control<string[]>([]),
-      address: this.fb.nonNullable.control<string>('', [Validators.required])
+      address: this.fb.nonNullable.control<string>('', [Validators.required]),
+      role: this.fb.nonNullable.control<string>('', [Validators.required]),
     });
 
     this.interestEntered = signal([])

@@ -65,7 +65,10 @@ export class AddEmergencyAlertComponent {
         timestamp: new Date(),
       };
 
-      this.residentService.addEmergencyAlert(newAlert);
+      this.residentService.addEmergencyAlert(newAlert).subscribe((value) => {
+        console.log(value)
+      });
+      
       this.dialogRef.close();
     }
   }

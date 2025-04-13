@@ -1,3 +1,3 @@
 export const environment = {
-    graphqlUri: "http://localhost:5000"
+    graphqlUri: "http://localhost:5000/graphql"
 };

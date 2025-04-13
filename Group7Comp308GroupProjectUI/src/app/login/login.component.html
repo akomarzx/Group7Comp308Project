@@ -79,6 +79,17 @@
                                     <mat-error>Address is <strong>required</strong></mat-error>
                                 }
                             </mat-form-field>
+                            <mat-form-field class="my-1 w-100">
+                                <mat-label>Role</mat-label>
+                                <mat-select formControlName="role">
+                                    <mat-option value="RESIDENT">Resident</mat-option>
+                                    <mat-option value="BUSINESS_OWNER">Business Owner</mat-option>
+                                    <mat-option value="COMMUNITY_ORGANIZER">Community Organizer</mat-option>
+                                </mat-select>
+                                @if (registrationForm.controls['role'].hasError('required')) {
+                                    <mat-error>Role is <strong>required</strong></mat-error>
+                                }
+                            </mat-form-field>
                             <div>
                                 <span>{{ message() }}</span>
                             </div>

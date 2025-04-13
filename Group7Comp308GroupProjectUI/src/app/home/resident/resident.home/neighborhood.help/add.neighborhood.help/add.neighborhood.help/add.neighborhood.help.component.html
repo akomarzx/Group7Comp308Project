@@ -19,7 +19,7 @@
       </mat-form-field>
       <mat-form-field class="w-100">
         <mat-label>Interests</mat-label>
-        <mat-chip-grid #reactiveChipGrid aria-label="Interests" formControlName="interests">
+        <mat-chip-grid #reactiveChipGrid aria-label="Interests" formControlName="interestsArea">
           @for (interest of interestEntered(); track interest.id ; let idx = $index) {
           <mat-chip-row (removed)="remove(interest)">
             {{interest.name}}

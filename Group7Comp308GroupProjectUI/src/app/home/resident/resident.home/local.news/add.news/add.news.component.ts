@@ -52,7 +52,7 @@ export class AddNewsComponent {
       
       const newNews : LocalNewsPost = {
         ...formValue,
-        user: this.authService.currentUser?.username,
+        username: this.authService.currentUser?.username,
         timestamp: new Date()
       }
       

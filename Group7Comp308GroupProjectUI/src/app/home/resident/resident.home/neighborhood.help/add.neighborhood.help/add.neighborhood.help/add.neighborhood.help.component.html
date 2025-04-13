@@ -1,0 +1,55 @@
+<mat-card class="form-card p-3">
+  <mat-card-title class="my-2">Request for help</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+        @if (postForm.get('title')?.hasError('required')) {
+        <mat-error>Title is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Message</mat-label>
+        <textarea matInput rows="4" formControlName="content"></textarea>
+        @if (postForm.get('content')?.hasError('required')) {
+        <mat-error>Message is required</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <mat-label>Interests</mat-label>
+        <mat-chip-grid #reactiveChipGrid aria-label="Interests" formControlName="interests">
+          @for (interest of interestEntered(); track interest.id ; let idx = $index) {
+          <mat-chip-row (removed)="remove(interest)">
+            {{interest.name}}
+            <button matChipRemove aria-label="'remove genre' + keyword">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          }
+        </mat-chip-grid>
+        <input placeholder="Interests" [matChipInputFor]="reactiveChipGrid" #interestInput/>
+        <button mat-raised-button type="button" class="my-1" (click)="onAddInterests(interestInput.value)">
+            Add
+            <mat-icon>add</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location" />
+        @if (postForm.get('location')?.hasError('required')) {
+          <mat-error>Location is required</mat-error>
+        }
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="postForm.invalid"
+      >
+        Post
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

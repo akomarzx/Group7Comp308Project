@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
-import { FormBuilder, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder} from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,15 +9,14 @@ import { LocalNewsPost } from '../../../../models/Resident';
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogRef } from '@angular/cdk/dialog';
 import { AddNewsComponent } from './add.news/add.news.component';
 import { ResidentService } from '../../../../services/resident.service/resident.service.service';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../../../services/auth.service/auth.service';
 
 @Component({
   selector: 'app-local.news',
   imports: [
-    ReactiveFormsModule,
     MatToolbarModule,
     MatCardModule,
     MatFormFieldModule,
@@ -34,9 +33,12 @@ export class LocalNewsComponent implements OnInit, OnDestroy {
   postsSignal : WritableSignal<LocalNewsPost[]>
   #destroyed$ : Subject<void>
 
-  constructor(private fb: FormBuilder, private dialog : MatDialog, private residentService: ResidentService) {
+  authService : AuthService
+
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private residentService: ResidentService, authService : AuthService) {
     this.postsSignal = signal([])
     this.#destroyed$ = new Subject<void>()
+    this.authService = authService
   }
 
   ngOnInit(): void {

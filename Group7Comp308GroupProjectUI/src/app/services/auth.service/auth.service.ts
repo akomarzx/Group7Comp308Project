@@ -77,4 +77,9 @@ export class AuthService {
     //   )
     // );
   }
+
+  isAuthorized(role : string) {
+    return this.currentUser?.role === role as Role
+  }
+
 }

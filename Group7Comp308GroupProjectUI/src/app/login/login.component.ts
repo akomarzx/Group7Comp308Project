@@ -71,6 +71,26 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+
+    if(this.userSecService.isAuthenticated()) {
+      switch(this.userSecService.currentUser?.role) {
+        case Role.RESIDENT: {
+          this.router.navigate(['/home/resident'])
+          break;
+        } 
+        case Role.BUSINESS_OWNER: {
+          this.router.navigate(['/home/business'])
+          break;
+        }
+        case Role.COMMUNITY_ORGANIZER: {
+          this.router.navigate(['/home/community-organizer'])
+          break
+        }
+      }
+
+      return;
+    }
+
     this.loginForm.patchValue({
       username: "test",
       password: "PasswordTest1!"

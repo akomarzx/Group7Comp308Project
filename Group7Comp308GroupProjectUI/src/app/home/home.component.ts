@@ -12,6 +12,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { MatDialog } from '@angular/material/dialog';
 import { Role, RouteDisplay } from '../models/User';
 import { AuthService as AuthService } from '../services/auth.service/auth.service';
+import { routes } from '../app.routes';
 
 @Component({
   selector: 'app-home',
@@ -32,20 +33,16 @@ import { AuthService as AuthService } from '../services/auth.service/auth.servic
 })
 export class HomeComponent implements OnInit {
 
-  private routeNames : [{roleName: Role, routes: RouteDisplay[]}]
+  private routeNames : RouteDisplay[]
 
   constructor(private router: Router, private dialog : MatDialog, private authService: AuthService) {
+
     this.routeNames = [
-      {
-        roleName: Role.RESIDENT,
-        routes: [
           {routePath: "/home/resident", routeName: "Home"},
           {routePath: "/home/resident/local-news", routeName: "Local News"},
-          {routePath: "/home/resident/emergency-alert", routeName: "Emergency Alerts"},
           {routePath: "/home/resident/neighborhood-help", routeName: "Neighborhood Help"},
-        ]
-      },
-
+          {routePath: "/home/resident/emergency-alert", routeName: "Emergency Alerts"},
+          {routePath: "/home/business/listings", routeName: "Listings"},
     ]
   }
 
@@ -54,10 +51,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.router.navigate(['/home/resident'])
     console.log(this.authService.currentUser)
-    let result = this.routeNames.filter((item) => {
-      return item.roleName === this.authService.currentUser?.role
-    })
-    this.navbarRoutesToDisplay?.set(result[0].routes)
+
+    this.navbarRoutesToDisplay?.set(this.routeNames)
   }
 
   private breakpointObserver = inject(BreakpointObserver);

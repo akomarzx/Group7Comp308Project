@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
@@ -32,11 +32,11 @@ import { Subject, takeUntil } from 'rxjs';
 export class LocalNewsComponent implements OnInit, OnDestroy {
 
   postsSignal : WritableSignal<LocalNewsPost[]>
-  #destroyed$ : Subject<null>
+  #destroyed$ : Subject<void>
 
   constructor(private fb: FormBuilder, private dialog : MatDialog, private residentService: ResidentService) {
     this.postsSignal = signal([])
-    this.#destroyed$ = new Subject<null>()
+    this.#destroyed$ = new Subject<void>()
   }
 
   ngOnInit(): void {
@@ -48,7 +48,7 @@ export class LocalNewsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#destroyed$.next(null)
+    this.#destroyed$.next()
   }
 
   onAddNewsClicked() {

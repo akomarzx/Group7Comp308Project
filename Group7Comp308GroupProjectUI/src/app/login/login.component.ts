@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal, Signal, WritableSignal } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, signal, Signal, ViewChild, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,8 +39,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   currentTabIndex : number
   interestEntered: WritableSignal<{ id : number, name: string }[]>
 
+  @ViewChild("interestInput") interestInputControl : ElementRef | undefined
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  readonly chipInputControl = new FormControl<string[] | null>(null);
   
   constructor(private fb : FormBuilder, 
     private userSecService : AuthService, 
@@ -61,11 +62,12 @@ export class LoginComponent implements OnInit, OnDestroy{
       password: ['', [Validators.required,
         Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]
       ],
-      interests: this.fb.nonNullable.control<string[]>([], [Validators.required]),
+      interests: this.fb.nonNullable.control<string[]>([]),
       address: this.fb.nonNullable.control<string>('', [Validators.required])
     });
 
     this.interestEntered = signal([])
+
   }
 
   ngOnInit(): void {
@@ -84,14 +86,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     this.userSecService.authenticateUser(username, password).subscribe({
       next: (result: User) => {
-          let user : User = {
-            username: "Ronald",
-            accessToken: "adagasdasd",
-            role: Role.RESIDENT,
-            interests: [],
-            address: "Test address"
-          }
-          this.userSecService.storeUser(user)
+          this.userSecService.storeUser(result)
           this.router.navigate(['home'])
       },
       error: (error) => {
@@ -101,11 +96,13 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   onRegistrationSubmit() {
-    this.userSecService.registerUser(this.registrationForm.controls['username'].value, this.registrationForm.controls['password'].value).subscribe({
+
+    console.log(this.registrationForm.value);
+    
+    this.userSecService.registerUser(this.registrationForm.value).subscribe({
       next: (result) => {
-        this.message.set("Registration Successful")
-        this.currentTabIndex = 0
-        this.loginForm.patchValue(this.registrationForm.getRawValue())
+        this.userSecService.storeUser(result)
+        this.router.navigate(['home'])
       },
       error: (error) => {
         this.message.set(`Registration Failed - ${error?.description}`)
@@ -115,20 +112,22 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   onTabchange() {
     this.loginForm.reset();
-    this.loginForm.markAsUntouched()
+    this.loginForm.markAsUntouched();
     this.registrationForm.reset();
-    this.registrationForm.markAsUntouched()
+    this.registrationForm.markAsUntouched();
     this.message.set('');
   }
 
   remove(obj: { name: string }): void {
     this.interestEntered.update(interestList => {
-      return interestList.filter((value) => value.name !== obj.name)
+      return interestList.filter((value) => value.name !== obj.name);
     })
   }
 
   onAddInterests(input : string) {
-    this.interestEntered.update((values) => [...values, {name:input, id: this.interestEntered().length + 1}])
+    this.interestEntered.update((values) => [...values, {name:input, id: this.interestEntered().length + 1}]);
+    let inputControl = this.interestInputControl?.nativeElement as HTMLInputElement;
+    inputControl.value = '';
   }
 
 }
